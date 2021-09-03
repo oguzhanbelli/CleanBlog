@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const moment = require("moment")
+const moment = require('moment');
 
 const ejs = require('ejs');
 const path = require('path');
@@ -22,14 +22,13 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 //ROUTES
-app.get('/', async(req, res) => {
+app.get('/', async (req, res) => {
   // res.sendFile(path.resolve(__dirname, 'temp/index.html'));
   const posts = await Post.find({});
 
-
   res.render('index', {
     posts,
-    moment:moment
+    moment: moment,
   });
 });
 
@@ -41,10 +40,19 @@ app.get('/add', function (req, res) {
   res.render('add_post');
 });
 
+app.get('/post/:id', async(req, res) => {
+  const post = await Post.findById(req.params.id);
+
+  res.render('post', {
+    post,
+    moment:moment,
+  });
+});
+
 app.post('/add_post', function (req, res) {
   Post.create(req.body);
 
-  res.redirect("/");
+  res.redirect('/');
 });
 const port = 3000;
 app.listen(port, () => {
