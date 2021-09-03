@@ -40,7 +40,7 @@ app.get('/add', function (req, res) {
   res.render('add_post');
 });
 
-app.get('/post/:id', async(req, res) => {
+app.get('/posts/:id', async(req, res) => {
   const post = await Post.findById(req.params.id);
 
   res.render('post', {
