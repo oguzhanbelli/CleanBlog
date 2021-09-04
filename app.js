@@ -19,7 +19,7 @@ app.use(
 );
 
 //DB CONNECT
-mongoose.connect('mongodb+srv://oguzhanbelli:meMFkhkBaaDH9Zha@cluster0.l2q1h.mongodb.net/cleanblog-db?retryWrites=true&w=majority', {
+mongoose.connect('************************************', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
