@@ -1,14 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const moment = require('moment');
+
+const methodOverride = require('method-override');
 
 const ejs = require('ejs');
-const path = require('path');
-const Post = require('./models/Post');
+
 const app = express();
+
+const postController = require('./controllers/postControllers');
+const pageController = require('./controllers/pageControllers');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  methodOverride('_method', {
+    methods: ['GET', 'POST'],
+  })
+);
 
 //DB CONNECT
 mongoose.connect('mongodb://localhost/cleanblog-test-db', {
@@ -22,38 +30,22 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 //ROUTES
-app.get('/', async (req, res) => {
-  // res.sendFile(path.resolve(__dirname, 'temp/index.html'));
-  const posts = await Post.find({});
+app.get('/', postController.getPosts);
 
-  res.render('index', {
-    posts,
-    moment: moment,
-  });
-});
+app.get('/posts/:id', postController.getPost);
+app.put('/posts/:id', postController.updatePost);
 
-app.get('/about', function (req, res) {
-  res.render('about');
-});
+app.delete('/posts/:id', postController.deletePost);
 
-app.get('/add', function (req, res) {
-  res.render('add_post');
-});
+app.post('/add_post', postController.addPost);
 
-app.get('/posts/:id', async(req, res) => {
-  const post = await Post.findById(req.params.id);
+app.get('/about', pageController.getAboutPage);
+app.get('/add', pageController.getAddPostPage);
 
-  res.render('post', {
-    post,
-    moment:moment,
-  });
-});
 
-app.post('/add_post', function (req, res) {
-  Post.create(req.body);
+app.get('/posts/edit/:id',pageController.getPostEditPage);
 
-  res.redirect('/');
-});
+
 const port = 3000;
 app.listen(port, () => {
   console.log(`Sunucu port ${port}'de başladı`);
