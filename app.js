@@ -19,9 +19,13 @@ app.use(
 );
 
 //DB CONNECT
-mongoose.connect('mongodb://localhost/cleanblog-test-db', {
+mongoose.connect('mongodb+srv://oguzhanbelli:meMFkhkBaaDH9Zha@cluster0.l2q1h.mongodb.net/cleanblog-db?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+}).then(() => {
+  console.log("DB CONNECTED!");
+}).catch((err) =>{
+  console.log(err);
 });
 //Template Engine
 app.set('view engine', 'ejs');
